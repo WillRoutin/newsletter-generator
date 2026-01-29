@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>UX Curation Newsletter</title>
+    <style>
+        /* Reset CSS pour les clients email */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+
+        /* Styles généraux */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background-color: #F5EFE1;
+        }
+
+        a { color: #2B5FFF; text-decoration: none; }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .content-padding { padding: 20px !important; }
+            .logo-title { font-size: 36px !important; }
+            .grid-2-col { width: 100% !important; display: block !important; }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #F5EFE1;">
+    <!-- Container principal -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #F5EFE1;">
+        <tr>
+            <td style="padding: 40px 20px;">
+                <!-- Newsletter container -->
+                <table class="container" role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="margin: 0 auto; background-color: #F5EFE1;">
+
+                    <!-- Header avec logo UX Curation -->
+                    <tr>
+                        <td style="padding: 40px 32px 20px; text-align: center; position: relative;">
+                            <!-- Badge en haut à droite -->
+                            <div style="text-align: right; margin-bottom: 10px;">
+                                <span style="display: inline-block; background-color: #2B5FFF; color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">
+                                    La newsletter UX et Design by Oguilvy
+                                </span>
+                            </div>
+
+                            <!-- Logo UX Curation avec effet stroke -->
+                            <h1 class="logo-title" style="margin: 20px 0; font-size: 56px; font-weight: 900; color: #000000; text-shadow: -3px -3px 0 #F5C518, 3px -3px 0 #F5C518, -3px 3px 0 #F5C518, 3px 3px 0 #F5C518; letter-spacing: 2px; text-transform: uppercase;">
+                                UXCuration
+                            </h1>
+                        </td>
+                    </tr>
+
+                    {% for resource in resources %}
+                        {% if resource.type == 'introduction' %}
+                            <!-- Introduction -->
+                            <tr>
+                                <td class="content-padding" style="padding: 20px 32px;">
+                                    <p style="margin: 0 0 16px 0; font-size: 16px; color: #000000;">
+                                        👋 <strong>Hello les designers !</strong>
+                                    </p>
+                                    <div style="font-size: 15px; line-height: 1.7; color: #000000; white-space: pre-line;">
+                                        {{ resource.description }}
+                                    </div>
+                                    <p style="margin: 20px 0 0 0; font-size: 15px; color: #000000;">
+                                        <strong>Bonne lecture !</strong>
+                                    </p>
+                                    <p style="margin: 8px 0 0 0; font-size: 15px; color: #000000;">
+                                        L'équipe d'UX Curation 🧡
+                                    </p>
+                                </td>
+                            </tr>
+
+                        {% elif resource.type == 'ressource en vedette' %}
+                            <!-- Ressource en vedette -->
+                            <tr>
+                                <td class="content-padding" style="padding: 30px 32px;">
+                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #2B5FFF; border-radius: 24px; overflow: hidden;">
+                                        {% if resource.image %}
+                                        <tr>
+                                            <td style="padding: 24px 24px 0 24px;">
+                                                <img src="{{ resource.image }}" alt="{{ resource.titre }}" style="width: 100%; max-width: 100%; height: auto; display: block; border-radius: 12px;">
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td style="padding: 24px;">
+                                                <h3 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700; color: #FFFFFF; line-height: 1.3;">
+                                                    {{ resource.titre }}
+                                                </h3>
+                                                <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #FFFFFF; opacity: 0.95;">
+                                                    {{ resource.description }}
+                                                </p>
+                                                {% if resource.lien %}
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                                    <tr>
+                                                        <td style="border-radius: 25px; background-color: #FFFFFF;">
+                                                            <a href="{{ resource.lien }}" style="display: inline-block; padding: 12px 28px; color: #2B5FFF; text-decoration: none; font-weight: 600; font-size: 14px;">
+                                                                Regarder l'interview
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Check if there are standard resources -->
+                    {% set has_resources = resources|selectattr('type', 'equalto', 'ressources')|list|length > 0 %}
+                    {% if has_resources %}
+                    <!-- Section Title: Notre curation -->
+                    <tr>
+                        <td class="content-padding" style="padding: 40px 32px 24px;">
+                            <h2 style="margin: 0; font-size: 28px; font-weight: 800; color: #000000; letter-spacing: -0.5px;">
+                                Notre curation
+                            </h2>
+                        </td>
+                    </tr>
+
+                    <!-- Grid 2 colonnes pour les ressources -->
+                    <tr>
+                        <td class="content-padding" style="padding: 0 32px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    {% set resources_list = resources|selectattr('type', 'equalto', 'ressources')|list %}
+                                    {% for resource in resources_list %}
+                                        {% if loop.index0 % 2 == 0 %}
+                                            {% if loop.index0 > 0 %}
+                                                </tr><tr>
+                                            {% endif %}
+                                        {% endif %}
+                                        <td class="grid-2-col" style="width: 48%; vertical-align: top; padding-bottom: 20px; {% if loop.index0 % 2 == 0 %}padding-right: 10px;{% else %}padding-left: 10px;{% endif %}">
+                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                {% if resource.image %}
+                                                <tr>
+                                                    <td>
+                                                        <img src="{{ resource.image }}" alt="{{ resource.titre }}" style="width: 100%; height: auto; border-radius: 12px; margin-bottom: 12px;">
+                                                    </td>
+                                                </tr>
+                                                {% endif %}
+                                                <tr>
+                                                    <td>
+                                                        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #000000; line-height: 1.3;">
+                                                            {{ resource.titre }}
+                                                        </h4>
+                                                        <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #000000;">
+                                                            {{ resource.description }}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    <!-- Check if there are videos -->
+                    {% set has_videos = resources|selectattr('type', 'equalto', 'vidéothèque')|list|length > 0 %}
+                    {% if has_videos %}
+                    <!-- Section Title: La vidéothèque -->
+                    <tr>
+                        <td class="content-padding" style="padding: 40px 32px 24px;">
+                            <h2 style="margin: 0; font-size: 28px; font-weight: 800; color: #000000; letter-spacing: -0.5px;">
+                                La vidéothèque
+                            </h2>
+                        </td>
+                    </tr>
+
+                    {% for resource in resources %}
+                        {% if resource.type == 'vidéothèque' %}
+                        <!-- Video Resource - Layout horizontal -->
+                        <tr>
+                            <td class="content-padding" style="padding: 0 32px 20px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        {% if resource.image %}
+                                        <td style="width: 140px; vertical-align: top; padding-right: 16px;">
+                                            <a href="{{ resource.lien }}" style="display: block;">
+                                                <img src="{{ resource.image }}" alt="{{ resource.titre }}" style="width: 140px; height: auto; border-radius: 8px;">
+                                            </a>
+                                        </td>
+                                        {% endif %}
+                                        <td style="vertical-align: top;">
+                                            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #000000; line-height: 1.3;">
+                                                {{ resource.titre }}
+                                            </h4>
+                                            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #000000;">
+                                                {{ resource.description }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- Check if there are events -->
+                    {% set has_events = resources|selectattr('type', 'equalto', 'événements')|list|length > 0 %}
+                    {% if has_events %}
+                    <!-- Section Title: Les events Design -->
+                    <tr>
+                        <td class="content-padding" style="padding: 40px 32px 24px;">
+                            <h2 style="margin: 0; font-size: 28px; font-weight: 800; color: #000000; letter-spacing: -0.5px;">
+                                Les events Design du mois de Février
+                            </h2>
+                        </td>
+                    </tr>
+
+                    {% for resource in resources %}
+                        {% if resource.type == 'événements' %}
+                        <!-- Event Card -->
+                        <tr>
+                            <td class="content-padding" style="padding: 0 32px 16px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border: 1px solid #E0D5C7; border-radius: 12px; background-color: #FFFFFF;">
+                                    <tr>
+                                        <!-- Date -->
+                                        <td style="width: 80px; padding: 20px; text-align: center; vertical-align: top; border-right: 1px solid #E0D5C7;">
+                                            {% if resource.date %}
+                                                {% set date_parts = resource.date.split() %}
+                                                <div style="font-size: 14px; color: #666; font-weight: 600; text-transform: capitalize;">
+                                                    {{ date_parts[1] if date_parts|length > 1 else 'Mar' }}
+                                                </div>
+                                                <div style="font-size: 32px; color: #000; font-weight: 700; line-height: 1;">
+                                                    {{ date_parts[0] if date_parts|length > 0 else '5' }}
+                                                </div>
+                                            {% endif %}
+                                        </td>
+
+                                        <!-- Event Details -->
+                                        <td style="padding: 20px; vertical-align: top;">
+                                            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #000000; line-height: 1.3;">
+                                                {{ resource.titre }}
+                                            </h4>
+                                            <p style="margin: 0; font-size: 13px; color: #666666;">
+                                                {% if resource.horaire %}{{ resource.horaire }} | {% endif %}
+                                                {% if resource.localite %}{{ resource.localite }} | {% endif %}
+                                                {% if resource.prix %}{{ resource.prix }} | {% endif %}
+                                                {% if resource.langue %}{{ resource.langue }}{% endif %}
+                                            </p>
+                                        </td>
+
+                                        <!-- Button -->
+                                        <td style="width: 100px; padding: 20px; text-align: right; vertical-align: middle;">
+                                            {% if resource.lien %}
+                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+                                                <tr>
+                                                    <td style="border-radius: 20px; background-color: #F5EFE1; border: 1px solid #000000;">
+                                                        <a href="{{ resource.lien }}" style="display: inline-block; padding: 8px 16px; color: #000000; text-decoration: none; font-weight: 600; font-size: 12px; white-space: nowrap;">
+                                                            M'inscrire
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- Footer spacing -->
+                    <tr>
+                        <td style="padding: 40px;">
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

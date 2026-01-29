@@ -1,0 +1,15 @@
+# Dépendances pour le générateur de newsletter
+# Flask : framework web pour l'interface
+Flask==3.0.3
+
+# Pandas : manipulation de données Excel
+pandas==2.2.2
+
+# Openpyxl : lecture de fichiers Excel (.xlsx)
+openpyxl==3.1.5
+
+# Jinja2 : moteur de templates (inclus avec Flask mais explicite)
+Jinja2==3.1.4
+
+# Gunicorn : serveur WSGI pour production
+gunicorn==21.2.0

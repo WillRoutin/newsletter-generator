@@ -4,6 +4,8 @@ Application Flask pour générer des newsletters HTML depuis des fichiers Excel
 from flask import Flask, render_template, request, send_file, jsonify, redirect, url_for
 from werkzeug.utils import secure_filename
 import os
+import zipfile
+from io import BytesIO
 from datetime import datetime
 from excel_parser import NewsletterExcelParser
 from html_generator import NewsletterHTMLGenerator
@@ -107,11 +109,29 @@ def upload_file():
 @app.route('/download/<filename>')
 def download_file(filename):
     """
-    Télécharge le fichier HTML généré.
+    Télécharge le fichier HTML généré dans un fichier ZIP.
     """
     try:
         file_path = os.path.join(app.config['OUTPUT_FOLDER'], filename)
-        return send_file(file_path, as_attachment=True)
+
+        # Créer un fichier ZIP en mémoire
+        memory_file = BytesIO()
+        with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+            # Ajouter le fichier HTML au ZIP avec un nom propre
+            zf.write(file_path, arcname=filename)
+
+        # Repositionner le curseur au début du fichier
+        memory_file.seek(0)
+
+        # Nom du fichier ZIP (remplacer .html par .zip)
+        zip_filename = filename.replace('.html', '.zip')
+
+        return send_file(
+            memory_file,
+            mimetype='application/zip',
+            as_attachment=True,
+            download_name=zip_filename
+        )
     except FileNotFoundError:
         return jsonify({'error': 'Fichier introuvable'}), 404
 
